@@ -22,9 +22,10 @@ client.on('messageCreate', message => {
   let found = false;
 
   const censored = message.content.replace(/\b\w+\b/g, word => {
-    const cleanWord = word.replace(/[^\w\s]|_/g, "").toLowerCase();
+    const cleanWord = word.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();  // Remove non-alphanumeric characters
+    const wordWithoutSpaces = cleanWord.replace(/\s+/g, '');  // Remove spaces inside the word
 
-    if (bannedWords.some(badWord => badWord.toLowerCase() === cleanWord)) {
+    if (bannedWords.some(badWord => badWord.toLowerCase().replace(/\s+/g, '') === wordWithoutSpaces)) {
       found = true;
       return '█'.repeat(word.length);
     }
