@@ -19,13 +19,14 @@ client.on('ready', () => {
 client.on('messageCreate', message => {
   if (message.author.bot) return;
 
-  const content = message.content.toLowerCase();
   let found = false;
 
   const censored = message.content.replace(/\b\w+\b/g, word => {
-    if (bannedWords.includes(word.toLowerCase())) {
+    const cleanWord = word.replace(/[^\w\s]|_/g, "").toLowerCase();
+
+    if (bannedWords.some(badWord => badWord.toLowerCase() === cleanWord)) {
       found = true;
-      return '█'.repeat(word.length); 
+      return '█'.repeat(word.length);
     }
     return word;
   });
